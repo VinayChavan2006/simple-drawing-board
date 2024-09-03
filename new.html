@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw it!!</title>
+    <style>
+        nav{
+            display:flex;
+            background-color: crimson;
+            padding: 10px 5px;
+            justify-content: space-around;
+        }
+        canvas{
+            border: 2px solid black;
+            cursor: crosshair;
+
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <button id="pen">Pen</button>
+        <input type="color" name="colorPicker" id="colorPicker">
+        <button id="eraser">Eraser</button>
+        <button id="clear">Clear All</button>
+        <!-- <div style="display: flex;align-items: center;">
+            <button id="text">Add Text</button>
+            <div id="textfield">
+                <textarea rows="3"></textarea>
+            </div>
+            
+        </div> -->
+        
+        
+        <div style="display: flex;align-items: center;">
+            <input type="range" name="width" id="width" min="1" max="20">
+            <div id="width_value"></div>
+        </div>
+    </nav>
+    <canvas width="1210px" height="500px" id="drawing_canvas"></canvas>
+    <script>
+        let mode = "pen";
+        let color = "#000000";
+        isDrawing = false;
+        value = 5;
+        width = document.getElementById("width");
+        penBtn = document.getElementById("pen");
+        colorPicker = document.getElementById("colorPicker");
+        erase_btn = document.getElementById("eraser");
+        drawing_board = document.getElementById("drawing_canvas");
+        // textBtn = document.getElementById("text");
+        // textfield = document.getElementById("textfield");
+        ctx = drawing_board.getContext("2d");
+        clear = document.getElementById("clear");
+        div = document.getElementById("width_value");
+        clear.addEventListener("click",(event)=>{
+            ctx.fillStyle = "#ffffff"
+            ctx.fillRect(0,0,1210,500)
+        })
+
+        // textBtn.addEventListener("click",(event)=>{
+        //     document.querySelector("textarea").addEventListener("keypress",(event)=>{
+        //         if(event.key == "Enter"){
+        //             ctx.font = `${value}px Arial`;
+        //         ctx.fillText(event.target.value,drawing_board.clientX-drawing_board.offsetLeft,drawing_board.clientY-drawing_board.offsetTop);
+        //         }
+                
+        //     })
+        // });
+
+        width.addEventListener("input",(event)=>{
+            value = event.target.value
+            div.innerText = value;
+        })
+
+        erase_btn.addEventListener("click",(event)=>{
+            mode = "eraser";
+            color = "#ffffff";
+            ctx.lineWidth = value;
+        });
+        penBtn.addEventListener("click",(event)=>{
+            mode = "pen"
+            color = "#000000"
+            colorPicker.value = "#000000"
+        })
+
+        colorPicker.addEventListener("input",(event)=>{
+            color = event.target.value;
+            mode = "pen"
+        })
+        // drawing_board.addEventListener("dblclick",(event)=>{
+        //     isDrawing = !isDrawing;
+        //     ctx.beginPath()
+        // })
+        drawing_board.addEventListener("mousedown",(event)=>{
+            isDrawing = true;
+
+        })
+        drawing_board.addEventListener("mouseup",(event)=>{
+            isDrawing = false;
+            ctx.beginPath();
+        })
+        drawing_board.addEventListener("mousemove",(event)=>{
+            if(isDrawing){
+                ctx.strokeStyle = color;
+                ctx.lineWidth = value;
+                ctx.lineTo(event.clientX-drawing_board.offsetLeft, event.clientY-drawing_board.offsetTop);
+                ctx.lineCap = "round"
+                ctx.stroke()
+            }
+        })
+
+
+
+
+
+
+    </script>
+</body>
+</html>
